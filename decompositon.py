@@ -16,7 +16,7 @@ def distinguish(matrix):
 def solve_unitary(matrix):
     t = Symbol("t")
     result = solve([cos(t) - matrix[0][0]])
-    return result[0]
+    return result[0][t]
 
 #distinguish return 1 case
 def decomposition_0V(matrix):
@@ -61,23 +61,3 @@ m_V1 = np.array([[1,0,0,0],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
 
-'''
-temp1 = distinguish(m_0V)
-temp2 = distinguish(m_1V)
-temp3 = distinguish(m_V0)
-temp4 = distinguish(m_V1)
-print(temp1)
-print(temp2)
-print(temp3)
-print(temp4)
-
-'''
-
-tempa = decomposition_0V(m_0V)
-print(tempa)
-tempb = decomposition_1V(m_1V)
-print(tempb)
-tempc = decomposition_V0(m_V0)
-print(tempc)
-tempd = decomposition_V1(m_V1)
-print(tempd)
