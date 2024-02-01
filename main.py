@@ -1,13 +1,14 @@
 %matplotlib inline
 
 import math
-import decomposition
+import decomposition_2qubit as d2
 import numpy as np
 from qiskit import QuantumCircuit, execute, Aer
 from qiskit.visualization import plot_histogram
 from qiskit.extensions import *
 from qiskit.quantum_info import Statevector
 
+#test set
 #0V
 matrix_0V = np.array([[1/np.sqrt(2),1/np.sqrt(2),0,0],
           [-1/np.sqrt(2),1/np.sqrt(2),0,0],
@@ -31,60 +32,25 @@ matrix_V1 = np.array([[1,0,0,0],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
 
-matrix = matrix_V0
-type = decomposition.distinguish(matrix)
+matrix = matrix_0V
+type = d2.distinguish(matrix)
 
-circuit = QuantumCircuit(2,2)
-circuit.barrier()
+qc = QuantumCircuit(2,2)
+qc.barrier()
 
 if type == 1:  #0V
-    alpha, beta, gamma = decomposition.decomposition_0V(matrix)
-    circuit.rz((alpha-gamma)/2,0)
-    circuit.x(1)
-    circuit.cx(1,0)
-    circuit.x(1)
-    circuit.ry(beta/2,0)
-    circuit.rz((alpha+gamma)/2,0)
-    circuit.x(1)
-    circuit.cx(1,0)
-    circuit.x(1)
-    circuit.rz(-alpha,0)
-    circuit.ry(-beta/2,0)
+    d2.decomposition_0V(qc, matrix)
 
 elif type == 2: #1V
-    alpha, beta, gamma = decomposition.decomposition_1V(matrix)
-    circuit.rz((alpha-gamma)/2,0)
-    circuit.cx(1,0)
-    circuit.ry(beta/2,0)
-    circuit.rz((alpha+gamma)/2,0)
-    circuit.cx(1,0)
-    circuit.rz(-alpha,0)
-    circuit.ry(-beta/2,0)
+    d2.decomposition_1V(qc, matrix)
     
 elif type == 3: #V0
-    alpha, beta, gamma = decomposition.decomposition_V0(matrix)
-    circuit.rz((alpha-gamma)/2,1)
-    circuit.x(0)
-    circuit.cx(0,1)
-    circuit.x(0)
-    circuit.ry(beta/2,1)
-    circuit.rz((alpha+gamma)/2,1)
-    circuit.x(0)
-    circuit.cx(0,1)
-    circuit.x(0)
-    circuit.rz(-alpha,1)
-    circuit.ry(-beta/2,1)
+    d2.decomposition_V0(qc, matrix)
     
 elif type == 4: #V1
-    alpha, beta, gamma = decomposition.decomposition_V1(matrix)
-    circuit.rz((alpha-gamma)/2,1)
-    circuit.cx(0,1)
-    circuit.ry(beta/2,1)
-    circuit.rz((alpha+gamma)/2,1)
-    circuit.cx(0,1)
-    circuit.rz(-alpha,1)
-    circuit.ry(-beta/2,1)
-ket = Statevector(circuit)
+    d2.decomposition_V1(qc, matrix)
+
+ket = Statevector(qc)
 ket.draw('latex')
 
-circuit.draw('mpl')
+qc.draw('mpl')
