@@ -12,18 +12,24 @@ def distinguish(matrix):
     if(matrix[0][0] == 1 and matrix[2][2] == 1):
         return 4
 
-
+#return single qubit gate parameter(theta, lambda, mu), unit : degree
 def solve_unitary(matrix):
     x = np.real(matrix[0][0])
     y = np.imag(matrix[0][0])
     a = np.real(matrix[0][1])
     b = np.imag(matrix[0][1])
-
+    
     r = np.sqrt(x**2 + y**2)
     theta = np.arccos(r)
-    lam = np.arctan(y/x)
-    mu = np.arctan(b/a)
-    return theta, lam, mu
+    if ( x==0 ):
+        lam = np.pi/2
+    else:
+        lam = np.arctan(y/x)
+    if ( a==0 ):
+        mu = np.pi/2
+    else:
+        mu = np.arctan(b/a)
+    return np.degrees(theta), np.degrees(lam), np.degrees(mu)
 
 #distinguish return 1 case
 def decomposition_0V(matrix):
@@ -67,3 +73,8 @@ m_V1 = np.array([[1,0,0,0],
           [0,1/np.sqrt(2),0,1/np.sqrt(2)],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
+
+temp = np.array([[1,0,0,0],
+          [0,1j,0,1j],
+          [0,0,1,0],
+          [0,1j,0,-1j]])
