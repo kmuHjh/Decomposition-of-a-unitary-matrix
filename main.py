@@ -31,46 +31,59 @@ matrix_V1 = np.array([[1,0,0,0],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
 
-matrix = matrix_0V
+matrix = matrix_V0
 type = decomposition.distinguish(matrix)
 
 circuit = QuantumCircuit(2,2)
+circuit.barrier()
 
 if type == 1:  #0V
-    theta = decomposition.decomposition_0V(matrix)
+    alpha, beta, gamma = decomposition.decomposition_0V(matrix)
+    circuit.rz((alpha-gamma)/2,0)
     circuit.x(1)
     circuit.cx(1,0)
     circuit.x(1)
-    circuit.ry(math.degrees(theta),0)
+    circuit.ry(beta/2,0)
+    circuit.rz((alpha+gamma)/2,0)
     circuit.x(1)
     circuit.cx(1,0)
     circuit.x(1)
-    circuit.ry(-math.degrees(theta),0)
+    circuit.rz(-alpha,0)
+    circuit.ry(-beta/2,0)
 
 elif type == 2: #1V
-    theta = decomposition.decomposition_1V(matrix)
+    alpha, beta, gamma = decomposition.decomposition_1V(matrix)
+    circuit.rz((alpha-gamma)/2,0)
     circuit.cx(1,0)
-    circuit.ry(math.degrees(theta),0)
+    circuit.ry(beta/2,0)
+    circuit.rz((alpha+gamma)/2,0)
     circuit.cx(1,0)
-    circuit.ry(-math.degrees(theta),0)
+    circuit.rz(-alpha,0)
+    circuit.ry(-beta/2,0)
     
 elif type == 3: #V0
-    theta = decomposition.decomposition_V0(matrix)
+    alpha, beta, gamma = decomposition.decomposition_V0(matrix)
+    circuit.rz((alpha-gamma)/2,1)
     circuit.x(0)
     circuit.cx(0,1)
     circuit.x(0)
-    circuit.ry(math.degrees(theta),1)
+    circuit.ry(beta/2,1)
+    circuit.rz((alpha+gamma)/2,1)
     circuit.x(0)
     circuit.cx(0,1)
     circuit.x(0)
-    circuit.ry(-math.degrees(theta),1)
+    circuit.rz(-alpha,1)
+    circuit.ry(-beta/2,1)
     
 elif type == 4: #V1
-    theta = decomposition.decomposition_V1(matrix)
+    alpha, beta, gamma = decomposition.decomposition_V1(matrix)
+    circuit.rz((alpha-gamma)/2,1)
     circuit.cx(0,1)
-    circuit.ry(math.degrees(theta),1)
+    circuit.ry(beta/2,1)
+    circuit.rz((alpha+gamma)/2,1)
     circuit.cx(0,1)
-    circuit.ry(-math.degrees(theta),1)
+    circuit.rz(-alpha,1)
+    circuit.ry(-beta/2,1)
 ket = Statevector(circuit)
 ket.draw('latex')
 

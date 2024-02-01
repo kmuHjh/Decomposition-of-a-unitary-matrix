@@ -12,7 +12,7 @@ def distinguish(matrix):
     if(matrix[0][0] == 1 and matrix[2][2] == 1):
         return 4
 
-#return single qubit gate parameter(theta, lambda, mu), unit : degree
+#return single qubit gate parameter(alpha, beta, gamma), unit : degree
 def solve_unitary(matrix):
     x = np.real(matrix[0][0])
     y = np.imag(matrix[0][0])
@@ -29,31 +29,32 @@ def solve_unitary(matrix):
         mu = np.pi/2
     else:
         mu = np.arctan(b/a)
-    return np.degrees(theta), np.degrees(lam), np.degrees(mu)
+    
+    alpha = lam + mu
+    beta = 2*theta
+    gamma = lam - mu
+
+    return np.degrees(alpha), np.degrees(beta), np.degrees(gamma)
 
 #distinguish return 1 case
 def decomposition_0V(matrix):
     u = np.array([[matrix[0][0],matrix[0][1]],[matrix[1][0],matrix[1][1]]])
-    t = solve_unitary(u)
-    return t
+    return solve_unitary(u)
 
 #distinguish return 2 case
 def decomposition_1V(matrix):
     u = np.array([[matrix[2][2],matrix[2][3]],[matrix[3][2],matrix[3][3]]])
-    t = solve_unitary(u)
-    return t
+    return solve_unitary(u)
 
 #distinguish return 3 case
 def decomposition_V0(matrix):
     u = np.array([[matrix[0][0],matrix[0][2]],[matrix[2][0],matrix[2][2]]])
-    t = solve_unitary(u)
-    return t
+    return solve_unitary(u)
 
 #distinguish return 4 case
 def decomposition_V1(matrix):
     u = np.array([[matrix[1][1],matrix[1][3]],[matrix[3][1],matrix[3][3]]])
-    t = solve_unitary(u)
-    return t
+    return solve_unitary(u)
 
 
 m_0V = np.array([[1/np.sqrt(2),1/np.sqrt(2),0,0],
@@ -73,8 +74,3 @@ m_V1 = np.array([[1,0,0,0],
           [0,1/np.sqrt(2),0,1/np.sqrt(2)],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
-
-temp = np.array([[1,0,0,0],
-          [0,1j,0,1j],
-          [0,0,1,0],
-          [0,1j,0,-1j]])
