@@ -14,9 +14,16 @@ def distinguish(matrix):
 
 
 def solve_unitary(matrix):
-    t = Symbol("t")
-    result = solve([cos(t) - matrix[0][0]])
-    return result[0][t]
+    x = np.real(matrix[0][0])
+    y = np.imag(matrix[0][0])
+    a = np.real(matrix[0][1])
+    b = np.imag(matrix[0][1])
+
+    r = np.sqrt(x**2 + y**2)
+    theta = np.arccos(r)
+    lam = np.arctan(y/x)
+    mu = np.arctan(b/a)
+    return theta, lam, mu
 
 #distinguish return 1 case
 def decomposition_0V(matrix):
@@ -60,4 +67,3 @@ m_V1 = np.array([[1,0,0,0],
           [0,1/np.sqrt(2),0,1/np.sqrt(2)],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
-
