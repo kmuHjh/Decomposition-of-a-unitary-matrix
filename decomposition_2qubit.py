@@ -38,65 +38,65 @@ def solve_unitary(matrix):
     return np.degrees(alpha), np.degrees(beta), np.degrees(gamma)
 
 #distinguish return 1 case
-def decomposition_0V(QuantumCircuit, matrix):
+def decomposition_0V(QuantumCircuit, matrix, control_bit, target_bit):
     qc = QuantumCircuit
     u = np.array([[matrix[0][0],matrix[0][1]],[matrix[1][0],matrix[1][1]]])
     alpha, beta, gamma = solve_unitary(u)
-    qc.rz((alpha-gamma)/2,0)
-    qc.x(1)
-    qc.cx(1,0)
-    qc.x(1)
-    qc.ry(beta/2,0)
-    qc.rz((alpha+gamma)/2,0)
-    qc.x(1)
-    qc.cx(1,0)
-    qc.x(1)
-    qc.rz(-alpha,0)
-    qc.ry(-beta/2,0)
+    qc.rz((alpha-gamma)/2, control_bit)
+    qc.x(target_bit)
+    qc.cx(target_bit, control_bit)
+    qc.x(target_bit)
+    qc.ry(beta/2, control_bit)
+    qc.rz((alpha+gamma)/2, control_bit)
+    qc.x(target_bit)
+    qc.cx(target_bit, control_bit)
+    qc.x(target_bit)
+    qc.rz(-alpha, control_bit)
+    qc.ry(-beta/2, control_bit)
 
 #distinguish return 2 case
-def decomposition_1V(QuantumCircuit, matrix):
+def decomposition_1V(QuantumCircuit, matrix, control_bit, target_bit):
     qc = QuantumCircuit
     u = np.array([[matrix[2][2],matrix[2][3]],[matrix[3][2],matrix[3][3]]])
     alpha, beta, gamma = solve_unitary(u)
-    qc.rz((alpha-gamma)/2,0)
-    qc.cx(1,0)
-    qc.ry(beta/2,0)
-    qc.rz((alpha+gamma)/2,0)
-    qc.cx(1,0)
-    qc.rz(-alpha,0)
-    qc.ry(-beta/2,0)
+    qc.rz((alpha-gamma)/2, control_bit)
+    qc.cx(target_bit, control_bit)
+    qc.ry(beta/2, control_bit)
+    qc.rz((alpha+gamma)/2, control_bit)
+    qc.cx(target_bit, control_bit)
+    qc.rz(-alpha, control_bit)
+    qc.ry(-beta/2, control_bit)
     
 
 #distinguish return 3 case
-def decomposition_V0(QuantumCircuit, matrix):
+def decomposition_V0(QuantumCircuit, matrix, control_bit, target_bit):
     qc = QuantumCircuit
     u = np.array([[matrix[0][0],matrix[0][2]],[matrix[2][0],matrix[2][2]]])
     alpha, beta, gamma = solve_unitary(u)
-    qc.rz((alpha-gamma)/2,1)
-    qc.x(0)
-    qc.cx(0,1)
-    qc.x(0)
-    qc.ry(beta/2,1)
-    qc.rz((alpha+gamma)/2,1)
-    qc.x(0)
-    qc.cx(0,1)
-    qc.x(0)
-    qc.rz(-alpha,1)
-    qc.ry(-beta/2,1)
+    qc.rz((alpha-gamma)/2, control_bit)
+    qc.x(target_bit)
+    qc.cx(target_bit, control_bit)
+    qc.x(target_bit)
+    qc.ry(beta/2, control_bit)
+    qc.rz((alpha+gamma)/2, control_bit)
+    qc.x(target_bit)
+    qc.cx(target_bit, control_bit)
+    qc.x(target_bit)
+    qc.rz(-alpha, control_bit)
+    qc.ry(-beta/2, control_bit)
 
 #distinguish return 4 case
-def decomposition_V1(QuantumCircuit, matrix):
+def decomposition_V1(QuantumCircuit, matrix, control_bit, target_bit):
     qc = QuantumCircuit
     u = np.array([[matrix[1][1],matrix[1][3]],[matrix[3][1],matrix[3][3]]])
     alpha, beta, gamma = solve_unitary(u)
-    qc.rz((alpha-gamma)/2,1)
-    qc.cx(0,1)
-    qc.ry(beta/2,1)
-    qc.rz((alpha+gamma)/2,1)
-    qc.cx(0,1)
-    qc.rz(-alpha,1)
-    qc.ry(-beta/2,1)
+    qc.rz((alpha-gamma)/2, control_bit)
+    qc.cx(target_bit, control_bit)
+    qc.ry(beta/2, control_bit)
+    qc.rz((alpha+gamma)/2, control_bit)
+    qc.cx(target_bit, control_bit)
+    qc.rz(-alpha, control_bit)
+    qc.ry(-beta/2, control_bit)
 
 #test set
 m_0V = np.array([[1/np.sqrt(2),1/np.sqrt(2),0,0],

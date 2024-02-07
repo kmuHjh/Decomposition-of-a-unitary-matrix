@@ -39,16 +39,16 @@ qc = QuantumCircuit(2,2)
 qc.barrier()
 
 if type == 1:  #0V
-    d2.decomposition_0V(qc, matrix)
+    d2.decomposition_0V(qc, matrix, 0, 1)
 
 elif type == 2: #1V
-    d2.decomposition_1V(qc, matrix)
+    d2.decomposition_1V(qc, matrix, 0, 1)
     
 elif type == 3: #V0
-    d2.decomposition_V0(qc, matrix)
+    d2.decomposition_V0(qc, matrix, 1, 0)
     
 elif type == 4: #V1
-    d2.decomposition_V1(qc, matrix)
+    d2.decomposition_V1(qc, matrix, 1, 0)
 
 ket = Statevector(qc)
 ket.draw('latex')
