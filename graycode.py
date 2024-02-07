@@ -39,13 +39,16 @@ class Graycode:
             temp = int(self.arr[i],2)
             self.arr[i] = temp+1
 '''
+
+matrix = (1/2)*np.array([
+[1,1,1,1],
+[1,-1,1,-1],
+[1,1,-1,-1],
+[1,-1,-1,1]])
+
 '''
-matrix = np.array([[1,1,1,1],
-          [1,-1,1,-1],
-          [1,1,-1,-1],
-          [1,-1,-1,1]])
-'''
-matrix = np.array([[0,0,0,0,-1,0,0,0],
+matrix = np.array([
+[0,0,0,0,-1,0,0,0],
 [0,0,0,0,0,-1,0,0],
 [0,0,0,0,0,0,0,-1],
 [0,0,0,0,0,0,-1,0],
@@ -53,13 +56,21 @@ matrix = np.array([[0,0,0,0,-1,0,0,0],
 [0,1,0,0,0,0,0,0],
 [0,0,0,1,0,0,0,0],
 [0,0,1,0,0,0,0,0]])
-
+'''
+'''
+matrix = (1/2)*np.array([
+[1,1,1,1],
+[1,1j,-1,-1j],
+[1,-1,1,-1],
+[1,-1j,-1,1j]])
+'''
 #make (col, pmatrix_col) = 0, use (row, col) p-matrix
 def get_pmatrix(matrix, pmatrix_col, row, col): 
     base = np.identity((np.size(matrix[0])))
     x = matrix[row][pmatrix_col]
     y = matrix[col][pmatrix_col]
     r = np.sqrt(x**2 + y**2)
+    
     a = x/r
     b = y/r
     base[row][row] = np.conjugate(a)
@@ -70,7 +81,8 @@ def get_pmatrix(matrix, pmatrix_col, row, col):
     return base
 
 def get_pmatrix_stack(matrix):
-    stack = []
+    stack_matrix = []
+    stack_type = []  # CNOT type(qubit number - n, row - graycode[j-1], col - graycode[j])
     n = 0
     size = np.size(matrix[0])
     while True:
@@ -82,31 +94,31 @@ def get_pmatrix_stack(matrix):
     graycode = Graycode(n)
     graycode_2 = Graycode(n)
     new = matrix.copy()
-    print(graycode)
     for i in range(np.size(graycode)-1):
         for j in range(np.size(graycode)-1,0,-1):
             x = new[graycode[j-1]][graycode_2[i]]
             y = new[graycode[j]][graycode_2[i]]
-            if x==0 and y==0:
+            if ((new[graycode[j]][graycode_2[i]])==0):
                 continue
             p_matrix = get_pmatrix(new, graycode_2[i], graycode[j-1], graycode[j])
-            stack.append(p_matrix)
-            new = p_matrix.dot(new) 
-            
+            stack_matrix.append(p_matrix.conjugate().transpose())
+            stack_type.append([n, graycode[j-1],graycode[j]])
+            new = np.dot(p_matrix, new) 
+            new = np.round(new, decimals=5)
         graycode = np.delete(graycode,0)
-    print('final')
-    print(new)
-    return stack
+    new = np.round(new, decimals=5)
+    return stack_matrix, stack_type
 
 
-temp = get_pmatrix_stack(matrix)
+temp, temp_2 = get_pmatrix_stack(matrix)
 size = int(np.size(temp)/(np.size(matrix[0]))**2)
 
-
-for i in range(size):
+'''
+for i in range(size-1,-1,-1):
     print(i)
+    print(temp_2[i])
     print(temp[i])
-
+'''
 
 
 

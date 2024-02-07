@@ -1,4 +1,5 @@
 import numpy as np
+import graycode as gc
 from qiskit import QuantumCircuit, execute, Aer
 from sympy import Symbol, symbols, solve, exp, cos, sin, I
 
@@ -36,6 +37,26 @@ def solve_unitary(matrix):
     gamma = lam - mu
 
     return np.degrees(alpha), np.degrees(beta), np.degrees(gamma)
+
+def twoqubit_to_single(QuantumCircuit, matrix):
+    qc = QuantumCircuit
+    stack_matrix, stack_type = gc.get_pmatrix_stack(matrix)
+    size = int(np.size(stack_matrix)/(np.size(matrix[0]))**2)
+    for i in range(size-1,-1,-1):
+        type = distinguish(stack_matrix[i])
+        if type == 1:  #0V
+            decomposition_0V(qc, matrix, 0, 1)
+
+        elif type == 2: #1V
+            decomposition_1V(qc, matrix, 0, 1)
+    
+        elif type == 3: #V0
+            decomposition_V0(qc, matrix, 1, 0)
+    
+        elif type == 4: #V1
+            decomposition_V1(qc, matrix, 1, 0)
+        
+    return 0
 
 #distinguish return 1 case
 def decomposition_0V(QuantumCircuit, matrix, control_bit, target_bit):
@@ -99,6 +120,12 @@ def decomposition_V1(QuantumCircuit, matrix, control_bit, target_bit):
     qc.ry(-beta/2, control_bit)
 
 #test set
+matrix = (1/2)*np.array([
+[1,1,1,1],
+[1,-1,1,-1],
+[1,1,-1,-1],
+[1,-1,-1,1]])
+#twoqubit_to_single(matrix)
 m_0V = np.array([[1/np.sqrt(2),1/np.sqrt(2),0,0],
           [-1/np.sqrt(2),1/np.sqrt(2),0,0],
           [0,0,1,0],

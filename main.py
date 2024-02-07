@@ -32,23 +32,17 @@ matrix_V1 = np.array([[1,0,0,0],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
 
-matrix = matrix_0V
-type = d2.distinguish(matrix)
+#matrix = matrix_0V
+matrix = (1/2)*np.array([
+[1,1,1,1],
+[1,-1,1,-1],
+[1,1,-1,-1],
+[1,-1,-1,1]])
 
 qc = QuantumCircuit(2,2)
 qc.barrier()
 
-if type == 1:  #0V
-    d2.decomposition_0V(qc, matrix, 0, 1)
-
-elif type == 2: #1V
-    d2.decomposition_1V(qc, matrix, 0, 1)
-    
-elif type == 3: #V0
-    d2.decomposition_V0(qc, matrix, 1, 0)
-    
-elif type == 4: #V1
-    d2.decomposition_V1(qc, matrix, 1, 0)
+d2.twoqubit_to_single(qc, matrix)
 
 ket = Statevector(qc)
 ket.draw('latex')
