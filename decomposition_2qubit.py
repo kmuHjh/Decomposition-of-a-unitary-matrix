@@ -1,5 +1,6 @@
 import numpy as np
 import graycode as gc
+import math
 from qiskit import QuantumCircuit, execute, Aer
 from sympy import Symbol, symbols, solve, exp, cos, sin, I
 
@@ -16,45 +17,31 @@ def distinguish(matrix):
 
 #return single qubit gate parameter(alpha, beta, gamma), unit : degree
 def solve_unitary(matrix):
-    x = np.real(matrix[0][0])
-    y = np.imag(matrix[0][0])
-    a = np.real(matrix[0][1])
-    b = np.imag(matrix[0][1])
+    theta = math.atan2(matrix[0][1],matrix[0][0])
     
-    r = np.sqrt(x**2 + y**2)
-    theta = np.arccos(r)
-    if ( x==0 ):
-        lam = np.pi/2
-    else:
-        lam = np.arctan(y/x)
-    if ( a==0 ):
-        mu = np.pi/2
-    else:
-        mu = np.arctan(b/a)
-    
-    alpha = lam + mu
+    alpha = 0
     beta = 2*theta
-    gamma = lam - mu
+    gamma = 0
 
-    return np.degrees(alpha), np.degrees(beta), np.degrees(gamma)
+    return (alpha), (beta), (gamma)
 
 def twoqubit_to_single(QuantumCircuit, matrix):
     qc = QuantumCircuit
     stack_matrix, stack_type = gc.get_pmatrix_stack(matrix)
     size = int(np.size(stack_matrix)/(np.size(matrix[0]))**2)
-    for i in range(size-1,-1,-1):
+    for i in reversed(range(size)):
         type = distinguish(stack_matrix[i])
         if type == 1:  #0V
-            decomposition_0V(qc, matrix, 0, 1)
+            decomposition_0V(qc, stack_matrix[i], 0, 1)
 
         elif type == 2: #1V
-            decomposition_1V(qc, matrix, 0, 1)
+            decomposition_1V(qc, stack_matrix[i], 0, 1)
     
         elif type == 3: #V0
-            decomposition_V0(qc, matrix, 1, 0)
+            decomposition_V0(qc, stack_matrix[i], 1, 0)
     
         elif type == 4: #V1
-            decomposition_V1(qc, matrix, 1, 0)
+            decomposition_V1(qc, stack_matrix[i], 1, 0)
         
     return 0
 

@@ -101,8 +101,8 @@ def get_pmatrix_stack(matrix):
             if ((new[graycode[j]][graycode_2[i]])==0):
                 continue
             p_matrix = get_pmatrix(new, graycode_2[i], graycode[j-1], graycode[j])
+            stack_type.append([n, graycode[j-1], graycode[j]])
             stack_matrix.append(p_matrix.conjugate().transpose())
-            stack_type.append([n, graycode[j-1],graycode[j]])
             new = np.dot(p_matrix, new) 
             new = np.round(new, decimals=5)
         graycode = np.delete(graycode,0)
@@ -114,12 +114,11 @@ temp, temp_2 = get_pmatrix_stack(matrix)
 size = int(np.size(temp)/(np.size(matrix[0]))**2)
 
 '''
-for i in range(size-1,-1,-1):
+for i in range(size):
     print(i)
     print(temp_2[i])
     print(temp[i])
 '''
-
 
 
 

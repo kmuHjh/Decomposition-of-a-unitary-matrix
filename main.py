@@ -40,6 +40,8 @@ matrix = (1/2)*np.array([
 [1,-1,-1,1]])
 
 qc = QuantumCircuit(2,2)
+#qc.x(0)
+#qc.x(1)
 qc.barrier()
 
 d2.twoqubit_to_single(qc, matrix)
