@@ -104,9 +104,9 @@ def get_pmatrix_stack(matrix):
             stack_type.append([n, graycode[j-1], graycode[j]])
             stack_matrix.append(p_matrix.conjugate().transpose())
             new = np.dot(p_matrix, new) 
-            new = np.round(new, decimals=5)
+            new = np.round(new, decimals=10)
         graycode = np.delete(graycode,0)
-    new = np.round(new, decimals=5)
+    new = np.round(new, decimals=10)
     return stack_matrix, stack_type
 
 
