@@ -1,11 +1,8 @@
 %matplotlib inline
 
-import math
 import decomposition_2qubit as d2
 import numpy as np
-from qiskit import QuantumCircuit, execute, Aer
-from qiskit.visualization import plot_histogram
-from qiskit.extensions import *
+from qiskit import *
 from qiskit.quantum_info import Statevector
 
 #test set
@@ -32,19 +29,27 @@ matrix_V1 = np.array([[1,0,0,0],
           [0,0,1,0],
           [0,-1/np.sqrt(2),0,1/np.sqrt(2)]])
 
-#matrix = matrix_0V
-matrix = (1/2)*np.array([
-[1,1,1,1],
-[1,-1,1,-1],
-[1,1,-1,-1],
-[1,-1,-1,1]])
-
+#test1
+matrix_1 = (1/np.sqrt(3)) * np.array([
+    [1, 1, 0, 1],
+    [1, 0, 1, -1],
+    [0, -1, 1, 1],
+    [-1, 1, 1, 0]
+])
+#test2
+matrix_2 = (1/2)*np.array([
+        [1, 1, 1, 1],
+        [1, 1j, -1, -1j],
+        [1, -1, 1, -1],
+        [1, -1j, -1, 1j]
+    ])
+    
 qc = QuantumCircuit(2,2)
 #qc.x(0)
 #qc.x(1)
 qc.barrier()
 
-d2.twoqubit_to_single(qc, matrix)
+d2.decomposition_2q(qc, matrix)
 
 ket = Statevector(qc)
 ket.draw('latex')
